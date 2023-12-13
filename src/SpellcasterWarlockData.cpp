@@ -76,16 +76,16 @@ void SpellcasterWarlockData::parseIniAndInit(std::string Raw) {
     boost::split(data, Raw, boost::is_any_of(","));
     bool Registered = data.at(0).compare("1") == 0;
     std::string Name = data.at(1);
-    int Ladder = data.at(2).toInt();
-    int Melee = data.at(3).toInt();
-    int Played = data.at(4).toInt();
-    int Won = data.at(5).toInt();
-    int Died = data.at(6).toInt();
-    int Elo = data.at(7).toInt();
+    int Ladder = std::stoi(data.at(2));
+    int Melee = std::stoi(data.at(3));
+    int Played = std::stoi(data.at(4));
+    int Won = std::stoi(data.at(5));
+    int Died = std::stoi(data.at(6));
+    int Elo = std::stoi(data.at(7));
     std::string Color = data.at(8);
-    boost::posix_time::ptime la = data.at(9).toInt();
-    bool Mobile = data.at(10).toInt() == 1;
-    int id = data.at(11).toInt();
+    boost::posix_time::ptime la = boost::posix_time::microsec_clock::local_time() - boost::posix_time::seconds(std::stoi(data.at(9)));
+    bool Mobile = std::stoi(data.at(10)) == 1;
+    int id = std::stoi(data.at(11));
     //qDebug() << "SpellcasterWarlockData::parseIniAndInit" << Raw << Registered << Name << Ladder << Melee << Played << Won << Died << Elo << la << id;
 
     init(Name, Registered, Ladder, Melee, Played, Won, Died, Elo, Color, la, Mobile, id);
@@ -193,10 +193,11 @@ boost::posix_time::ptime SpellcasterWarlockData::lastActivity() const
 }
 
 std::string SpellcasterWarlockData::toString() const {
-    return std::string("%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12")
-        .arg(boolToIntS(_registered), _name, intToStr(_ladder), intToStr(_melee) // 1-4
-            , intToStr(_played), intToStr(_won), intToStr(_died), intToStr(_elo)) //5-8
-        .arg(_color, intToStr(_lastActivity), boolToIntS(_mobile), intToStr(_warlockId)); // 9-12
+    return "";
+    //std::string("%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12")
+    //    .arg(boolToIntS(_registered), _name, intToStr(_ladder), intToStr(_melee) // 1-4
+    //        , intToStr(_played), intToStr(_won), intToStr(_died), intToStr(_elo)) //5-8
+    //    .arg(_color, intToStr(_lastActivity), boolToIntS(_mobile), intToStr(_warlockId)); // 9-12
 }
 
 //std::string SpellcasterWarlockData::toJSON() const {
@@ -211,7 +212,7 @@ std::string SpellcasterWarlockData::toString() const {
 
 
 bool SpellcasterWarlockData::online() const {
-    return _ai || (QDateTime::currentSecsSinceEpoch() - _lastActivity <= 5 * 60);
+    return false;// _ai || (QDateTime::currentSecsSinceEpoch() - _lastActivity <= 5 * 60);
 }
 
 int SpellcasterWarlockData::elo() const

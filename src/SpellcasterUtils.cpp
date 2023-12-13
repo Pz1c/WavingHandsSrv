@@ -26,6 +26,9 @@ std::string SpellcasterUtils::httpsGetRequest(std::string host, std::string path
     socket.lowest_layer().shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
     socket.lowest_layer().cancel(ec);
     socket.lowest_layer().close();
+    
+    return boost::beast::buffers_to_string(res.body().data());
+    //return res;
 }
 
 std::string SpellcasterUtils::getStringFromData(const std::string& data, const std::string search, const std::string& valueBegin, const std::string& valueEnd, int& pos, bool noChangePos) {
